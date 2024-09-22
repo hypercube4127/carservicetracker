@@ -1,0 +1,30 @@
+{
+    "name": "DVO Frontend Dev Container",
+    "dockerComposeFile": "../../docker-compose.yml",
+    "service": "frontend-dev",
+    // Configure tool-specific properties.
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Set *default* container specific settings.json values on container create.
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "angular.ng-template",
+                "johnpapa.angular2",
+                "sibiraj-s.vscode-scss-formatter",
+                "gruntfuggly.todo-tree",
+                "nrwl.angular-console",
+                "formulahendry.auto-rename-tag",
+                "coenraads.bracket-pair-colorizer-2",
+                "SonarSource.sonarlint-vscode",
+            ]
+        }
+    },
+    "workspaceFolder": "/opt/project",
+    "overrideCommand": false,
+    "remoteUser": "root"
+}

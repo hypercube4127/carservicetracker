@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "flask-app-backend"
+version = "0.1.0"
+description = "Create flask application instantly"
+authors = ["tcsecsei <tomi4127@gmail.com>"]
+readme = "README.md"
+
+packages  = [
+    { include = "app" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+debugpy = "^1.8.5"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.9"
+flask-migrate = "^4.0.7"
+flask-sqlalchemy = "^3.1.1"
+flask-jwt-extended = "^4.6.0"
+bcrypt = "^4.2.0"
+toml = "^0.10.2"
+marshmallow = "^3.21.3"
+flask-cors = "^5.0.0"
+
+[[tool.poetry.source]]
+name = "huawei"
+url = "https://mirrors.huaweicloud.com/repository/pypi/simple/"
+priority = 'default'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "app.app:main"
+
+[custom]
+app-title = "Flask App"
+build-number = "0"
+commit-hash = "HEAD"

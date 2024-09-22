@@ -1,0 +1,90 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-card-title {
+  font-size: 20px; 
+  padding: 10px; 
+}
+
+form {
+  width: 100%;
+}
+
+.form-card {
+  min-width: 120px;
+  margin: 20px auto;
+}
+
+.col:last-child {
+  margin-right: 0;
+}
+
+// Grid Breakpoints (használhatod a saját méreteidet)
+$breakpoints: (
+  'xs': 0, // Mobil
+  'sm': 576px, // Kisebb tablet
+  'md': 768px, // Tablet
+  'lg': 992px, // Kis laptop
+  'xl': 1200px // Nagy monitor
+);
+
+// Flex alapú oszlopok százalékos szélességgel
+@mixin flex-col($cols: 12) {
+  flex: 0 0 calc(100% / 12 * $cols - 20px);
+  max-width: calc(100% / 12 * $cols - 20px);
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+
+// Grid rendszert létrehozó mixin
+@mixin make-grid() {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+// Oszlop méret definiálása adott mérethez
+@mixin make-grid-columns($breakpoints) {
+  @each $breakpoint, $size in $breakpoints {
+    @media (min-width: $size) {
+      @for $i from 1 through 12 {
+        .col-#{$breakpoint}-#{$i} {
+          @include flex-col($i);
+        }
+      }
+    }
+  }
+}
+
+// Alapértelmezett viselkedés
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+
+  // Responsive breakpoints
+  @include make-grid-columns($breakpoints);
+
+  .row {
+    @include make-grid();
+    margin-right: -15px;
+    margin-left: -15px;
+
+    .col {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+  }
+}
+
+// Fix szélességű oszlopok (pl. col-6 stb.)
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    @include flex-col($i);
+  }
+}

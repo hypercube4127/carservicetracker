@@ -1,0 +1,129 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+      PGDATA: /data/postgres
+    volumes:
+       - db:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - flask
+
+  backend:
+    image: synappsacr.azurecr.io/flask-app/backend:latest
+    restart: unless-stopped
+    environment:
+      - DB_URL=postgresql://postgres:password@db/mydb
+    ports:
+      - "5000:5000"
+    networks:
+      - flask
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - prod
+
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    environment:
+      - DB_URL=postgresql://postgres:password@db/mydb
+    ports:
+      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5678:5678"
+    volumes:
+      - ./backend:/opt/project
+    networks:
+      - flask
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - ''
+
+  frontend:
+    image: synappsacr.azurecr.io/flask/frontend:latest
+    restart: unless-stopped
+    environment:
+      - BACKEND_URL=https://example/api
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - flask
+    depends_on:
+      backend:
+        condition: service_healthy
+    profiles:
+      - prod
+
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "127.0.0.1:4200:4200"
+    volumes:
+      - ./frontend:/opt/project
+    networks:
+      - flask
+    profiles:
+      - ''
+
+  pgadmin-dev:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+       - ./db_backup:/backup
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
+      - source: pgpass
+        target: /pgpass
+    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+    user: root
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    networks:
+      - flask
+
+configs:
+  pgpass:
+    content: db:5432:*:postgres:password
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "My Local Postgres 16.1",
+        "Host": "db",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "postgres",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}
+
+volumes:
+    db:
+    pgadmin:
+
+networks:
+  flask:

@@ -1,0 +1,59 @@
+h1 {
+  padding: 0 1rem;
+}
+
+h2 {padding: 1rem;}
+
+mat-toolbar{
+  position:fixed;
+  top:0;
+  z-index: 2;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+  mat-menu {
+    .currentuser {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      margin-right: 1rem;
+    }
+  }
+  
+}
+
+mat-sidenav-container {
+  height:100%;
+}
+
+mat-sidenav {
+  padding-top: 3.5rem;
+  transition: width 0.3s ease;
+  @media screen and (min-width: 600px) {
+    padding-top: 4rem;
+  }
+
+  .entry{
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding:0.75rem;
+  }
+
+}
+
+mat-sidenav-content{
+  box-sizing: border-box;
+  padding-top: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  @media screen and (min-width: 600px) {
+    padding-top: 5rem;
+  }
+}
+
+.collapsed {
+  width: 88px;   
+}

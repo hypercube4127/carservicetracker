@@ -1,0 +1,14 @@
+:host ::ng-deep  {
+  display: flex;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex: 0 0 50%;
+}

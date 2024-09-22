@@ -1,0 +1,44 @@
+:host ::ng-deep .mat-mdc-card-header-text {
+    width: 100%;
+    text-align: right;
+}
+
+.icon-lg {
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+}
+
+.mat-mdc-card {
+    color: #fff;
+    .mat-mdc-card-title {
+        font-size: 40px !important;
+    }
+    .mat-mdc-card-subtitle {
+        color: #fff;
+    }
+
+    .mat-mdc-card-actions {
+        a {
+            text-decoration: none;
+            cursor: pointer;
+            color: #fff;
+        }
+    }
+}
+
+.mat-mdc-card.danger {
+    background: linear-gradient(60deg, #ec407a, #d81b60);
+}
+
+.mat-mdc-card.warn {
+    background: linear-gradient(60deg, #ffa726, #fb8c00);
+}
+
+.mat-mdc-card.success {
+    background: linear-gradient(60deg, #66bb6a, #43a047);
+}
+
+.mat-mdc-card.info {
+    background: linear-gradient(60deg, #26c6da, #00acc1);
+}

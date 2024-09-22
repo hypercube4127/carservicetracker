@@ -1,0 +1,11 @@
+{
+    "evenBetterToml.schema.associations": {
+        "pypoetry.toml": {
+            "custom": {
+                "app-title": { "type": "string" },
+                "build-number": { "type": "string" },
+                "commit-hash": { "type": "string" }
+            }
+        }
+    }
+}
