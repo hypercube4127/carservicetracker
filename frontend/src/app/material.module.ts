@@ -10,7 +10,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 		MatMenuModule,
 		MatExpansionModule,
 		MatTabsModule,
-		MatFormFieldModule
+		MatFormFieldModule,
+		MatSelectModule
 	// Export other Angular Material modules as needed
   ]
 })

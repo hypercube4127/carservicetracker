@@ -2,16 +2,13 @@ import logging
 
 from flask import jsonify, g
 from werkzeug.exceptions import InternalServerError
-from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request, get_jwt
 from marshmallow import ValidationError
 
+from app.models import InvalidatedToken, User
 from app.schemas import BaseResponseSchema, Level
 
-from . import app
-from . import jwt
-from . import project_config
-
-from app.users.models import User
+from . import app, jwt, project_config
 
 # Define the logger object
 logger = logging.getLogger(__name__)
@@ -21,6 +18,9 @@ def load_user():
   g.app_title = project_config['custom']['app-title']
   try:
     verify_jwt_in_request()
+    invalid_token = InvalidatedToken.query.get(get_jwt()['jti'])
+    if invalid_token is not None:
+      return BaseResponseSchema("Token is invalidated, please log in again.", Level.ERROR).jsonify(), 401
     g.user = User.query.get(get_jwt_identity())
   except Exception as e:
     logger.warning(f"Error loading user: {e}")

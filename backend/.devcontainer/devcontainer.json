@@ -1,7 +1,8 @@
 {
-    "name" : "DVO Backend Dev Container",
+    "name" : "CarServiceTracker Backend Dev Container",
     "dockerComposeFile": "../../docker-compose.yml",
     "service": "backend-dev",
+    "runServices": ["db", "pgadmin-dev", "backend-dev"],
     // Configure tool-specific properties.
     "customizations": {
         // Configure properties specific to VS Code.

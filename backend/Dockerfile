@@ -18,7 +18,7 @@ RUN ln -s /opt/project/service.sh /usr/local/bin/service
 RUN poetry install --no-root
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s CMD curl -f http://localhost:5000/echo
-
+SHELL ["/bin/bash", "-c"]
 EXPOSE 5000
 ENTRYPOINT [ "/opt/project/docker-entrypoint.sh" ]
 

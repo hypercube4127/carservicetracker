@@ -10,6 +10,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { BaseResponse } from '../../models/baseresponse.model';
 import { SessionCountdownModule } from '../session-countdown/session-countdown.component';
+
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
@@ -27,13 +28,13 @@ export class AdminLayoutComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
   isMobile= true;
-  isCollapsed = true;
 
   currentUser: User | null = null;
 
   constructor(private authService: AuthService, private userService: UserService, private router: Router, private observer: BreakpointObserver) { }
 
   ngOnInit() {
+
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       if(screenSize.matches){
         this.isMobile = true;
@@ -67,13 +68,9 @@ export class AdminLayoutComponent {
     this.router.navigate(['login']);
   }
 
-  toggleMenu() {
-    if(this.isMobile){
-      this.sidenav.toggle();
-      this.isCollapsed = false;
-    } else {
-      this.sidenav.open();
-      this.isCollapsed = !this.isCollapsed;
-    }
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log('Filter value', filterValue);
   }
+
 }

@@ -3,6 +3,11 @@ from enum import Enum
 from flask import jsonify
 from marshmallow import ValidationError
 
+from app.schemas.login import LoginSchema
+from app.schemas.user import UserSchema
+from app.schemas.company import CompanySchema
+from app.schemas.site import SiteSchema
+
 class Level(Enum):
   ERROR = "ERROR"
   WARNING = "WARNING"
@@ -36,6 +41,8 @@ class BaseResponseSchema():
 
     for arg in args:
       if type(arg) is dict:
+        self.set_data(arg)
+      if type(arg) is list:
         self.set_data(arg)
       elif type(arg) is str:
         self.add_message(MessageSchema(arg))
@@ -74,7 +81,7 @@ class BaseResponseSchema():
     return {
       "data": self.data,
       "messages": [ { "message": message.message, "level": message.level.value } for message in self.messages ],
-      "fielderrors": [ { "error": error.message, "field": error.level.value } for error in self.fielderrors ],
+      "fielderrors": self.fielderrors,
       "token": self.token
     }
 
