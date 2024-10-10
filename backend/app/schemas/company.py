@@ -5,8 +5,7 @@ class CompanySchema(Schema):
   code = fields.Str(dump_only=True)
 
   name = fields.Str(required=True, validate=validate.Length(min=3))
-  email = fields.Email(required=True)
-  owner_id = fields.Int(required=True)
+  email = fields.Email(required=False)
   
   address = fields.Str()
   phone_number = fields.Str()

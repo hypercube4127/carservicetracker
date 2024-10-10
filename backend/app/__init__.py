@@ -9,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-from app.services.email import EmailSenderService
 
 # load environment variables from environment and .env file
 load_dotenv()
@@ -21,11 +20,13 @@ def load_pyproject_toml():
 def init_default_user():
   try:
     from app.models import User  # Import here to avoid circular import issues
-    if not db.session.query(User).filter_by(email='admin@carservicetracker.hu').first():
+    admin_email = os.getenv('ADMIN_USER_EMAIL')
+    if not db.session.query(User).filter_by(email=admin_email).first():
       admin_user = User(
-        email='admin@carservicetracker.hu',
+        email=admin_email,
         fullname="Admin",
-        password=bcrypt.hashpw('Passw0rd'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        password=bcrypt.hashpw(str(os.getenv('ADMIN_USER_DEFAULT_PW')).encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+        status=UserStatus.ACTIVE
       )
       db.session.add(admin_user)
       db.session.commit()
@@ -49,14 +50,6 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=int(os.getenv('JWT_EX
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
-email_service = EmailSenderService(
-  smtp_server=os.getenv('SMTP_SERVER'),
-  smtp_port=int(os.getenv('SMTP_PORT')),
-  username=os.getenv('SMTP_USERNAME'),
-  password=os.getenv('SMTP_PASSWORD'),
-  starttls=os.getenv('SMTP_STARTTLS').lower() == 'true',
-  sender=os.getenv('SMTP_SENDER')
-)
 CORS(app)
 
 # Importing models and routes (to avoid cross-referencing at the end)

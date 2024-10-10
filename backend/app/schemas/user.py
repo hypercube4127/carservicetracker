@@ -11,7 +11,7 @@ class UserSchema(Schema):
     allow_none=True,
     load_only=True, 
     validate=validate.Regexp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$|^$', 
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', 
       error="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
     )
   )

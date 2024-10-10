@@ -1,3 +1,4 @@
+import os
 from .. import db
 from enum import Enum
 
@@ -5,7 +6,6 @@ class UserStatus(Enum):
   PENDING = "pending"
   ACTIVE = "active"
   INACTIVE = "inactive"
-  BANNED = "banned"
 
 class User(db.Model):
   __tablename__ = 'user'
@@ -25,10 +25,8 @@ class User(db.Model):
   address = db.Column(db.String(120), nullable=True)
   zip_code = db.Column(db.String(10), nullable=True)
 
-  is_active = db.Column(db.Boolean(), default=True)
-
-  sites = db.relationship('Site', secondary='user_site', back_populates='users')
-
+  def is_admin(self):
+    return self.email == os.getenv('ADMIN_USER_EMAIL')
 
   def __repr__(self):
     return f'<User {self.email}>'
@@ -40,6 +38,7 @@ class User(db.Model):
       'fullname': self.fullname,
       'email': self.email,
       'phone': self.phone,
+      'status': self.status.value,
 
       'country': self.country,
       'state': self.state,

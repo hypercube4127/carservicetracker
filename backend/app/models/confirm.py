@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from app import db
 from enum import Enum
 
@@ -12,16 +13,27 @@ class Confirm(db.Model):
 
   code = db.Column(db.String(5), primary_key=True)
   type = db.Column(db.Enum(ConfirmType), nullable=False)
-  invited_email = db.Column(db.String(100), nullable=True)
-  expires = db.Column(db.DateTime, nullable=False, default=db.func.now())
+  name = db.Column(db.String(120), nullable=True)
+  email = db.Column(db.String(100), nullable=False)
+  expires = db.Column(db.DateTime, nullable=False)
   
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-  company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
-  
+  email_sent_at = db.Column(db.DateTime, nullable=True)
 
-  user = db.relationship('User', backref=db.backref('confirm', lazy=False))
-  company = db.relationship('Company', backref=db.backref('confirm', lazy=False))
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)
+  company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'), nullable=True)
   
+  user = db.relationship('User', backref=db.backref('confirm', lazy=False, cascade='all, delete'))
+  company = db.relationship('Company', backref=db.backref('confirm', lazy=False, cascade='all, delete'))
+  
+  def __init__(self, user, name, code, type, email, expires=datetime.now(timezone.utc) + timedelta(days=1), company=None):
+      self.user = user
+      self.name = name
+      self.code = code
+      self.type = type
+      self.email = email
+      self.expires = expires
+      self.company = company
+
   def __repr__(self):
     return f'<Confirm {self.type} ({self.company_id})>'
   

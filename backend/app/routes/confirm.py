@@ -7,7 +7,7 @@ from app.schemas import BaseResponseSchema, Level
 
 @app.route('/confirm/<string:code>', methods=['GET'])
 def confirm(code):
-  confirm = Confirm.query.get(code)
+  confirm:Confirm = Confirm.query.get(code)
   if confirm is None:
     return BaseResponseSchema('Invalid confirmation code', Level.ERROR).jsonify(), 400
   
@@ -23,8 +23,16 @@ def confirm(code):
     user: User = confirm.user
     user.status = UserStatus.ACTIVE
     db.session.delete(confirm)
+    db.session.add(user)
     db.session.commit()
     return BaseResponseSchema('Email confirmed', Level.SUCCESS).jsonify()
+  elif type == ConfirmType.MODIFY_EMAIL:
+    user: User = confirm.user
+    user.email = confirm.email
+    db.session.delete(confirm)
+    db.session.add(company)
+    db.session.commit()
+    return BaseResponseSchema('Email modify successful', Level.SUCCESS).jsonify()
   
   return BaseResponseSchema('Invalid confirmation type', Level.ERROR).jsonify(), 400
 

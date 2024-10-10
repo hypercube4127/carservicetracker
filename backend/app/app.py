@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-from app import app
+from app import app, db
 from flask_migrate import upgrade
 
 logger = logging.getLogger()
@@ -29,6 +29,4 @@ def main():
       logger.warning("Debugger started. Waiting for the client to start the application...")
       debugpy.wait_for_client()
   
-  app.jinja_env.auto_reload = True
-
   app.run(debug=False, port=port, host='0.0.0.0', use_reloader=True)

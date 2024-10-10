@@ -42,7 +42,7 @@ class BaseResponseSchema():
     for arg in args:
       if type(arg) is dict:
         self.set_data(arg)
-      if type(arg) is list:
+      elif type(arg) is list:
         self.set_data(arg)
       elif type(arg) is str:
         self.add_message(MessageSchema(arg))
