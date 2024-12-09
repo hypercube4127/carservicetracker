@@ -1,0 +1,11 @@
+.items {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0%;
+  div {
+    margin-right: 20px;
+    flex: 1 1 0%;
+    box-sizing: border-box;
+  }
+}

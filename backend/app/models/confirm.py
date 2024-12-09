@@ -5,17 +5,21 @@ from enum import Enum
 class ConfirmType(Enum):
   CONFIRM_EMAIL = 'user_email'
   MODIFY_EMAIL = 'modify_email'
+  REGISTER_COMPANY = 'register_company'
   DELETE_COMPANY = 'delete_company'
   ACCEPT_COMPANY_INVITATION = 'accept_company_invitation'
 
 class Confirm(db.Model):
   __tablename__ = 'confirm'
 
-  code = db.Column(db.String(5), primary_key=True)
-  type = db.Column(db.Enum(ConfirmType), nullable=False)
+  code = db.Column(db.String(100), primary_key=True)
+  type = db.Column(db.Enum(ConfirmType, native_enum=False), nullable=False)
   name = db.Column(db.String(120), nullable=True)
   email = db.Column(db.String(100), nullable=False)
   expires = db.Column(db.DateTime, nullable=False)
+  
+  company_name = db.Column(db.String(100), nullable=True)
+  user_password = db.Column(db.String(80), nullable=True)
   
   email_sent_at = db.Column(db.DateTime, nullable=True)
 
@@ -25,7 +29,7 @@ class Confirm(db.Model):
   user = db.relationship('User', backref=db.backref('confirm', lazy=False, cascade='all, delete'))
   company = db.relationship('Company', backref=db.backref('confirm', lazy=False, cascade='all, delete'))
   
-  def __init__(self, user, name, code, type, email, expires=datetime.now(timezone.utc) + timedelta(days=1), company=None):
+  def __init__(self, name, code, type, email, expires=datetime.now(timezone.utc) + timedelta(days=1), company=None, company_name=None, user_password=None, user=None):
       self.user = user
       self.name = name
       self.code = code
@@ -33,6 +37,8 @@ class Confirm(db.Model):
       self.email = email
       self.expires = expires
       self.company = company
+      self.company_name = company_name
+      self.user_password = user_password
 
   def __repr__(self):
     return f'<Confirm {self.type} ({self.company_id})>'

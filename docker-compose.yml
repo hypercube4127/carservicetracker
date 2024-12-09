@@ -42,7 +42,7 @@ services:
       - "127.0.0.1:5000:5000"
       - "127.0.0.1:5678:5678"
     volumes:
-      - ./backend:/opt/project
+      - ./backend:/opt/project:cached
     networks:
       - flask
     depends_on:
@@ -71,12 +71,14 @@ services:
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
+      target: dev
     environment:
       - CHOKIDAR_USEPOLLING=true
     ports:
       - "127.0.0.1:4200:4200"
     volumes:
-      - ./frontend:/opt/project
+      - ./frontend:/opt/project:cached
+      - /opt/project/node_modules
     networks:
       - flask
     profiles:

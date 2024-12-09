@@ -1,0 +1,11 @@
+:host ::ng-deep  {
+  h2 {
+    position: relative;
+
+    button {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+}

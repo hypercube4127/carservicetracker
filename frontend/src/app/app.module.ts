@@ -29,7 +29,7 @@ export function initializeApp(authGuard: AuthGuard): () => boolean {
     MaterialModule
   ],
   providers: [
-    AuthService, 
+    AuthService,
     AuthGuard, 
     provideHttpClient(withFetch()),
     {

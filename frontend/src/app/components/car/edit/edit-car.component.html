@@ -1,0 +1,26 @@
+<h2 *ngIf="carForm.get('id')">{{carForm.get('plate')}} {{carForm.get('model')}} {{carForm.get('make')}} {{carForm.get('year')}} ({{carForm.get('vin')}})</h2>
+<h2 *ngIf="!carForm.get('id')">New Car</h2>
+
+<form (ngSubmit)="saveCar()">
+  <mat-form-field appearance="fill">
+    <mat-label>Plate</mat-label>
+    <input matInput formControlName="plate" name="plate" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Model</mat-label>
+    <input matInput formControlName="model" name="model" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Make</mat-label>
+    <input matInput formControlName="make" name="make" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Year</mat-label>
+    <input matInput formControlName="year" name="year" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>VIN</mat-label>
+    <input matInput formControlName="vin" name="vin" required>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Save</button>
+</form>

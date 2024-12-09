@@ -4,6 +4,7 @@ from flask import request, g
 from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 
+from app.routes import USER_PATH, USER_PATH_ID
 from app.helpers import generate_code
 from app.schemas import BaseResponseSchema, Level, UserSchema
 from app.models import User, Confirm, ConfirmType, UserStatus
@@ -12,23 +13,23 @@ from app import db
 from app.services.email import EmailSenderService
 from app.services import user as user_service
 
-@app.route('/user', methods=['GET'])
+@app.route(f'{USER_PATH}', methods=['GET'])
 @jwt_required()
 def list_users():
   users = user_service.get_user_relations(g.user.id)
   mapped_users = [user.to_dict() for user in users]
   return BaseResponseSchema(mapped_users).jsonify()
 
-@app.route('/user/<int:id>', methods=['GET', 'PUT'])
+@app.route(f'{USER_PATH_ID}', methods=['GET', 'PUT'])
 @jwt_required()
-def get_user(id):
-  user: User = User.query.get(id)
+def get_user(user_id):
+  user: User = User.query.get(user_id)
   if user is None:
     return BaseResponseSchema("Unauthorized", Level.ERROR).jsonify(), 400
   
   if request.method == 'GET':
     user_service.get_user_relations_ids(g.user.id)
-    if g.user.id != id or g.user.id not in user_service.get_user_relations_ids(g.user.id): 
+    if g.user.id != user_id or g.user.id not in user_service.get_user_relations_ids(g.user.id): 
       return BaseResponseSchema("Unauthorized", Level.ERROR).jsonify(), 400
       
     return BaseResponseSchema(user.to_dict()).jsonify()
@@ -38,10 +39,10 @@ def get_user(id):
 
     data = UserSchema().load(request.json, partial=True, unknown='exclude')
     
-    if 'newPassword' in data and data['newPassword'] is not None and len(data['newPassword']) > 8:
-      if data['newPassword'] != data['reTypePassword']:
+    if 'password' in data and data['password'] is not None and len(data['password']) > 8:
+      if data['password'] != data['reTypePassword']:
         raise ValidationError('Passwords do not match', 'reTypePassword')
-      user.password = bcrypt.hashpw(data['newPassword'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+      user.password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     user.fullname = str(data['fullname']).strip()
     
@@ -70,7 +71,7 @@ def get_user(id):
     EmailSenderService.get_instance().send_confirm_emails()
     return BaseResponseSchema(user.to_dict(), response_msg).jsonify()
 
-@app.route('/user', methods=['POST'])
+@app.route(f'{USER_PATH}', methods=['POST'])
 def register():
   if g.user is not None:
     return BaseResponseSchema("You are already logged in, please log out before register a new user.", Level.ERROR).jsonify()
@@ -84,7 +85,7 @@ def register():
   user.email = email
   user.fullname = str(data['fullname']).strip()
   user.status = UserStatus.PENDING
-  user.password = bcrypt.hashpw(data['newPassword'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+  user.password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
   
   confirm = Confirm(user=user, name=user.fullname, code=generate_code(), type=ConfirmType.CONFIRM_EMAIL, email=email)
   db.session.add(user)

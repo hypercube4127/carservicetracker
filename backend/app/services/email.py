@@ -67,7 +67,7 @@ class EmailSenderService:
       confirm: Confirm = confirm
       context = {
         'name' : confirm.name,
-        'confirmation_link': os.getenv('EXTERNAL_URL') + "/confirm/" + str(confirm.code),
+        'confirmation_link': os.getenv('EXTERNAL_URL') + "/confirm?code=" + str(confirm.code),
         'current_year' : datetime.now().year
       }
       template_name = None
@@ -78,6 +78,10 @@ class EmailSenderService:
       elif confirm.type == ConfirmType.MODIFY_EMAIL:
         template_name="modify_email.html"
         subject="Email change confirmation"
+      elif confirm.type == ConfirmType.REGISTER_COMPANY:
+        template_name="register_company.html"
+        subject="Register your company"
+        context['company_name'] = confirm.company_name
       else:
         raise Exception(f"Unhandled confirm type {confirm.type}")
 

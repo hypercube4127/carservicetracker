@@ -3,7 +3,7 @@ export interface User {
   id: number;
   email: string;
   fullname: string;
-  newPassword: string;
+  password: string;
   reTypePassword: string;
 
   // Address

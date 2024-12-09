@@ -1,25 +1,14 @@
 <mat-toolbar color="primary">
-  <span style="width:194px;"> 
+  <span *ngIf="!isMobile" style="width:194px;"> 
     <img src="assets/images/icon_white.svg" alt="Logo" style="height: 50px;">
   </span>
   
-  <mat-form-field  style="margin-left: 20px; margin-top: 5px">
-    <input matInput [placeholder]="'Search'">
-  </mat-form-field>
+  <toolbar-search></toolbar-search>
   <span class="spacer"></span>
-
-  <mat-form-field appearance="fill">
-    <mat-select>
-      <mat-optgroup label="R-szerviz Kft.">
-        <mat-option value="option1">Marcali</mat-option>
-        <mat-option value="option2">Fonyód</mat-option>
-      </mat-optgroup>
-    </mat-select>
-  </mat-form-field>
-
+  <workspace-selector [isMobile]="isMobile"></workspace-selector>
   <session-countdown></session-countdown>
 
-  <h3>{{currentUser?.fullname}}</h3>
+  <h3 *ngIf="!isMobile">{{currentUser?.fullname}}</h3>
   <button mat-icon-button aria-label="User icon" [matMenuTriggerFor]="userMenu">
     <mat-icon>person</mat-icon>
   </button>
@@ -40,11 +29,8 @@
 </mat-toolbar>
 
 <mat-sidenav-container autosize="true">
-  <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'">
+  <mat-sidenav [mode]="isMobile ? 'push' : 'side'" [opened]="isMobile ? 'false' : 'true'" (openedChange)="menuOpened = $event">
     <mat-nav-list>
-
-
-
       <a mat-list-item (click)="dashboard()">
         <span class="entry">
           <mat-icon>house</mat-icon>
@@ -53,7 +39,7 @@
       </a>
 
       <div mat-subheader>Master Data</div>
-      <a mat-list-item>
+      <a mat-list-item (click)="car()">
         <span class="entry">
           <mat-icon>directions_car</mat-icon>
           <span>Cars</span>
@@ -89,12 +75,16 @@
         <span class="entry">
           <mat-icon>assignment</mat-icon>
           <span>Maintenance</span>
-        </span>
+        </span>   
       </a>
 
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
+    <button *ngIf="isMobile" [ngClass]="menuOpened === true ? 'opened' : 'closed'" class="sidenav-toggle" mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

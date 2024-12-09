@@ -4,18 +4,41 @@ import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { BaseResponse, Level, Message } from '../models/baseresponse.model';
 import { ToastrService } from 'ngx-toastr';
+import { UrlPlaceholder } from '../models/shared.model';
+import { LocalStorageService } from '../services/localstorage.service';
 
-export function authTokenInterceptor(
+export function requestInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
+  if (req.method === 'OPTIONS') {
+    return next(req);
+  }
+
   const authService = inject(AuthService);
+  const localStorageService = inject(LocalStorageService);
   const toastr = inject(ToastrService);
-  
   const token = authService.getToken();
-  console.log('Token:', token);
+  const companyId = localStorageService.get<number>('company_id');
+  const siteId = localStorageService.get<number>('site_id');
+
+  console.debug('Token:', token);
   if (token) {
+
+    //console.debug('AppContext Site:', contextHolder.getSiteId());
+  
+    var newUrl = req.url;
+
+    if (req.url.includes(UrlPlaceholder.COMPANY) && companyId) {
+      newUrl = req.url.replace(UrlPlaceholder.COMPANY, companyId.toString());
+    }
+
+    if (req.url.includes(UrlPlaceholder.SITE) && siteId) {
+      newUrl = req.url.replace(UrlPlaceholder.SITE, siteId.toString());
+    }
+    
     req = req.clone({
+      url: newUrl,
       setHeaders: {
         Authorization: `Bearer ${token}`
       }
@@ -24,6 +47,7 @@ export function authTokenInterceptor(
   return next(req).pipe(
     tap(event => {
       if (event instanceof HttpResponse) {
+        
         const body = event.body as BaseResponse<any>;
         if (body.token) {
             authService.setToken(body.token);
@@ -54,9 +78,11 @@ export function authTokenInterceptor(
     }),
     tap({
       error: (error: HttpErrorResponse) => {
-        error.error.messages.forEach((message: Message) => {
-          toastr.error(message.message);
-        });
+        if(error.error.messages) {
+          error.error.messages.forEach((message: Message) => {
+            toastr.error(message.message);
+          });
+        }
         console.error('Error:', error);
       }
     })

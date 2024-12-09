@@ -21,11 +21,7 @@ bcrypt = "^4.2.0"
 toml = "^0.10.2"
 marshmallow = "^3.21.3"
 flask-cors = "^5.0.0"
-
-[[tool.poetry.source]]
-name = "huawei"
-url = "https://mirrors.huaweicloud.com/repository/pypi/simple/"
-priority = 'default'
+requests = "^2.32.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -6,7 +6,7 @@ class UserSchema(Schema):
   email = fields.String(required=True,validate=validate.Email())
   phone = fields.String(required=False, allow_none=True)
 
-  newPassword = fields.String(
+  password = fields.String(
     required=False, 
     allow_none=True,
     load_only=True, 

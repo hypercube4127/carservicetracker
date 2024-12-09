@@ -12,7 +12,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   exports: [
@@ -28,7 +30,10 @@ import { MatSelectModule } from '@angular/material/select';
 		MatExpansionModule,
 		MatTabsModule,
 		MatFormFieldModule,
-		MatSelectModule
+		MatSelectModule,
+		MatTableModule,
+		MatPaginatorModule,
+		MatTooltipModule
 	// Export other Angular Material modules as needed
   ]
 })

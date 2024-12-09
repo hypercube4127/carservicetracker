@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
 import { AuthService } from '../../services/auth.service';
@@ -69,14 +69,18 @@ export class SessionCountdownModule implements OnInit, OnDestroy {
   }
 
   updateTime(): void {
-    const hours = Math.floor(this.totalSeconds / 3600);
-    const minutes = Math.floor((this.totalSeconds % 3600) / 60);
-    const seconds = Math.floor(this.totalSeconds % 60);
-
-    this.timeLeftFormatted = this.pad(hours) + ':' + this.pad(minutes) + ':' + this.pad(seconds);
+    var unit = 'h';
+    var number = 0;
+    if (this.totalSeconds >= 3600) {
+      number = Math.floor(this.totalSeconds / 3600);
+    } else if (this.totalSeconds >= 60) {
+      number = Math.floor(this.totalSeconds / 60);
+      unit = 'm';
+    } else {
+      number = Math.floor(this.totalSeconds);
+      unit = 's';
+    }
+    this.timeLeftFormatted = number + unit;
   }
 
-  pad(num: number): string {
-    return num < 10 ? '0' + num : num.toString();
-  }
 }

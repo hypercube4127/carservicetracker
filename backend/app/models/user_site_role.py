@@ -13,7 +13,7 @@ class UserSiteUserRole(db.Model):
 
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), primary_key=True)
   site_id = db.Column(db.Integer, db.ForeignKey('site.id', ondelete='CASCADE'), primary_key=True)
-  role = db.Column(db.Enum(UserRole), nullable=False)
+  role = db.Column(db.Enum(UserRole, native_enum=False), nullable=False)
   
   user = db.relationship('User', backref=db.backref('user_site_role', lazy=True))
   site = db.relationship('Site', backref=db.backref('user_site_role', lazy=True))

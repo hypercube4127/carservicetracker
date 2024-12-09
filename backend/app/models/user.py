@@ -14,7 +14,7 @@ class User(db.Model):
   
   fullname = db.Column(db.String(120), nullable=False)
   email = db.Column(db.String(120), unique=True, nullable=False)
-  status = db.Column(db.Enum(UserStatus), default=UserStatus.INACTIVE, nullable=False)
+  status = db.Column(db.Enum(UserStatus, native_enum=False), default=UserStatus.INACTIVE, nullable=False)
   password = db.Column(db.String(80), nullable=False)
 
   phone = db.Column(db.String(20), nullable=True)

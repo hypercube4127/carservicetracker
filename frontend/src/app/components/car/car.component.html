@@ -1,0 +1,36 @@
+<h2>Cars <button mat-raised-button color="primary" (click)="addCar()">Add Car</button></h2>
+<div class="mat-elevation-z8">
+  <mat-table [dataSource]="carList" matSort>
+    <ng-container matColumnDef="make">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Make </mat-header-cell>
+      <mat-cell *matCellDef="let car"> {{car.make}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="model">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Model </mat-header-cell>
+      <mat-cell *matCellDef="let car"> {{car.model}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="year">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Year </mat-header-cell>
+      <mat-cell *matCellDef="let car"> {{car.year}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="plate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Plate </mat-header-cell>
+      <mat-cell *matCellDef="let car"> {{car.plate}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="vin">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> VIN </mat-header-cell>
+      <mat-cell *matCellDef="let car"> {{car.vin}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+      <mat-cell *matCellDef="let car">
+        <button mat-button matTooltip="Edit" (click)="editCar(car)"><mat-icon>edit</mat-icon></button>
+        <button mat-button matTooltip="Delete" (click)="deleteCar(car)"><mat-icon>delete</mat-icon></button>
+        <button mat-button matTooltip="Car's worksheets" (click)="viewWorksheets(car)"><mat-icon>assignment</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[25, 100, 200]"></mat-paginator>
+</div>

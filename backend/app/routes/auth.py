@@ -8,11 +8,15 @@ from datetime import datetime, timedelta
 from app import app
 from app import db
 
+from app.models.site import Site
+from app.models.user_site_role import UserSiteUserRole
+from app.routes import AUTH_PATH
 from app.models import InvalidatedToken, User, UserStatus
 from app.schemas import LoginSchema
 from app.schemas import BaseResponseSchema, Level
+from app.services.company import get_user_companies
 
-@app.route('/auth/login', methods=['POST'])
+@app.route(f'{AUTH_PATH}/login', methods=['POST'])
 def login():
   data = LoginSchema().load(request.json)
   email = str(data['email']).lower().strip()
@@ -24,14 +28,30 @@ def login():
     elif user.status == UserStatus.INACTIVE:
       return BaseResponseSchema('Your user inactivated, please contact the administrator', Level.ERROR).jsonify(), 400
     
-    token = create_access_token(identity=user.id, expires_delta=timedelta(minutes=30))
+    token = create_access_token(identity=str(user.id), expires_delta=timedelta(minutes=30))
     response = BaseResponseSchema('Successful login', Level.SUCCESS)
     response.set_token(token)
     return response.jsonify()
 
   return BaseResponseSchema('Wrong email or password', Level.ERROR).jsonify(), 400
 
-@app.route('/auth/logout')
+@app.route(f'{AUTH_PATH}/available-sites', methods=['GET'])
+@jwt_required()
+def available_sites():
+  companies = get_user_companies(g.user.id)
+  user_roles = UserSiteUserRole.query.filter_by(user_id=g.user.id).all()
+  site_ids = [role.site_id for role in user_roles]
+
+  company_sites = []
+  for company in companies:
+    company_map = company.to_dict()
+    sites = Site.query.filter(Site.company_id == company.id, Site.id.in_(site_ids)).all()
+    company_map['sites'] = [site.to_dict() for site in sites]
+    company_sites.append(company_map)
+  response = BaseResponseSchema(company_sites)
+  return response.jsonify()
+
+@app.route(f'{AUTH_PATH}/logout')
 @jwt_required()
 def logout():
   invalidated = invalitade_token(get_jwt())
@@ -39,7 +59,7 @@ def logout():
     return BaseResponseSchema('Could not invalidate token', Level.ERROR).jsonify(), 400
   return BaseResponseSchema('Successful logout', Level.SUCCESS).jsonify(), 200
 
-@app.route('/auth/refreshtoken')
+@app.route(f'{AUTH_PATH}/refreshtoken')
 @jwt_required()
 def refreshtoken():
   jti = get_jwt()['jti']

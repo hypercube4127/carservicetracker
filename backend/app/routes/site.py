@@ -4,8 +4,9 @@ from app.schemas import BaseResponseSchema, Level
 from flask import request, g
 from app.models import Site
 from app import app, db
+from app.routes import COMPANY_PATH_ID, SITE_PATH, SITE_PATH_ID
 
-@app.route('/company/<int:company_id>/sites', methods=['GET'])
+@app.route(f'{COMPANY_PATH_ID}{SITE_PATH}', methods=['GET'])
 def get_sites(company_id):
   company = Company.query.get(company_id)
 
@@ -24,7 +25,7 @@ def get_sites(company_id):
   mapped_sites = [site.to_dict() for site in sites]
   return BaseResponseSchema(mapped_sites).jsonify()
 
-@app.route('/company/<int:company_id>/sites/<int:site_id>', methods=['GET'])
+@app.route(f'{COMPANY_PATH_ID}{SITE_PATH_ID}', methods=['GET'])
 def get_site(company_id, site_id):
   company = Company.query.get(company_id)
   if company is None:
@@ -39,7 +40,7 @@ def get_site(company_id, site_id):
 
   return BaseResponseSchema("Unauthorized", level=Level.ERROR).jsonify(), 400
 
-@app.route('/company/<int:company_id>/sites', methods=['POST'])
+@app.route(f'{COMPANY_PATH_ID}{SITE_PATH}', methods=['POST'])
 def create_site(company_id):
   company = Company.query.get(company_id)
 
@@ -52,7 +53,7 @@ def create_site(company_id):
   db.session.commit()
   return BaseResponseSchema().jsonify(site)
 
-@app.route('/company/<int:company_id>/sites/<int:site_id>', methods=['PUT'])
+@app.route(f'{COMPANY_PATH_ID}{SITE_PATH_ID}', methods=['PUT'])
 def update_site(company_id, site_id):
   data = request.json
   site = Site.query.filter_by(company_id=company_id, id=site_id).first()

@@ -1,0 +1,23 @@
+<h3 *ngIf="!isMobile">{{ currentSite ? currentSite.name : currentCompany?.name }}</h3>
+<h3 *ngIf="isMobile && currentSite"><mat-icon>garage</mat-icon></h3>
+<h3 *ngIf="isMobile && currentCompany && !currentSite"><mat-icon>business_center</mat-icon></h3>
+
+<button mat-icon-button [matMenuTriggerFor]="workspaceMenu">
+  <mat-icon matTooltip="Switch workspace">sync</mat-icon>
+</button>
+<mat-menu #workspaceMenu="matMenu" xPosition="before">
+  @for (company of availableCompaniesAndSites; track company) {
+    <button [ngClass]="company.selected === true ? 'selected' : ''" mat-menu-item (click)="changeWorkspace(company.id, null)">
+      <mat-icon>business_center</mat-icon>
+      {{company.name}}
+    </button>
+  
+    @for (site of company.sites; track site) {
+      <button [ngClass]="site.selected === true ? 'selected' : ''" mat-menu-item class="site" (click)="changeWorkspace(company.id, site.id)">
+        <mat-icon>garage</mat-icon>
+        {{site.name}}
+      </button>
+    }
+  }
+</mat-menu>
+

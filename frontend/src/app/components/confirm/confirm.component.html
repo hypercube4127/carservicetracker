@@ -1,0 +1,15 @@
+<div class="confirm-wrapper">
+  <mat-card class="confirm">
+    <mat-card-title>Confirm action</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="confirmForm" (ngSubmit)="sendCode()">
+        <mat-form-field appearance="fill">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code" name="code" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Send</button>
+        <button mat-button color="warn" class="back" type="button" (click)="goLogin()">Back</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

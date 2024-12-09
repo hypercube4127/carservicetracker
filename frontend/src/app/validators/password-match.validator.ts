@@ -2,10 +2,10 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): null => {
   
-  const newPassword = control.get('newPassword');
+  const password = control.get('password');
   const reTypePassword = control.get('reTypePassword');
 
-  if (newPassword && reTypePassword && newPassword.value !== reTypePassword.value) {
+  if (password && reTypePassword && password.value !== reTypePassword.value) {
     reTypePassword.setErrors({...reTypePassword.errors, 'passwordMismatch': true });
   } else if (reTypePassword) {
     const filteredErrors = Object.keys(reTypePassword.errors || {}).filter(key => key !== 'passwordMismatch');

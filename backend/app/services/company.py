@@ -1,3 +1,5 @@
+from flask import g
+from app.exceptions import ObjectNotFoundError, PermissionDeniedError
 from app.models.company import Company
 from app.models.user import User
 from app.models.user_site_role import UserSiteUserRole
@@ -18,6 +20,17 @@ def get_user_companies(user_id):
       companies.add(company)
   return companies
 
-def get_user_companies_ids( user_id):
+def get_user_companies_ids(user_id):
   companies = get_user_companies(user_id)
   return [company.id for company in companies]
+
+def get_company_by_id_check_permission(company_id):
+  company = Company.query.get(company_id)
+  if company is None:
+    raise ObjectNotFoundError("Company not found")
+  
+  get_user_companies = get_user_companies_ids(g.user.id)
+  if company.id not in get_user_companies:
+    raise PermissionDeniedError("Company not found")
+  
+  return company

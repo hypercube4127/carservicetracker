@@ -1,0 +1,29 @@
+:host ::ng-deep  {
+  display: flex;
+  margin-right: 20px;
+  background-color: #ffffff50;
+  border-radius: 24px;
+}
+
+h3 {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+  padding-left: 15px;
+  padding-right: 5px;
+
+  mat-icon {
+    padding-top: 5px;
+    font-size: 28px;
+    height: 28px;
+    width: 28px;
+  }
+}
+
+.site > mat-icon {
+  padding-left: 25px;
+}
+
+.selected {
+  border-bottom: 2px solid #3f51b5;
+  border-top: 2px solid #3f51b5;
+}

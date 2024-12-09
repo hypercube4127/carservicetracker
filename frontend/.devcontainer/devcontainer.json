@@ -3,6 +3,7 @@
     "dockerComposeFile": "../../docker-compose.yml",
     "service": "frontend-dev",
     "runServices": ["frontend-dev"],
+
     // Configure tool-specific properties.
     "customizations": {
         // Configure properties specific to VS Code.
@@ -21,7 +22,6 @@
                 "nrwl.angular-console",
                 "formulahendry.auto-rename-tag",
                 "coenraads.bracket-pair-colorizer-2",
-                "SonarSource.sonarlint-vscode",
             ]
         }
     },

@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { BaseResponse } from '../../models/baseresponse.model';
-import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-profile',
@@ -34,7 +33,7 @@ export class ProfileComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl(''),
 
-      newPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$|^$/)]),
+      password: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$|^$/)]),
       reTypePassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$|^$/)]),
       
       country: new FormControl(''),

@@ -1,3 +1,5 @@
+import { CompanySites } from "./companysites.model";
+
 export type Token = {
   jti: string;
   sub: number;
@@ -5,3 +7,7 @@ export type Token = {
   iat: number;
   exp: number;
 };
+
+export type Login = {
+  availableCompanySites: CompanySites[];
+}

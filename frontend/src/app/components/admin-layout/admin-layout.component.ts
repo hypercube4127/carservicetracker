@@ -10,6 +10,8 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { BaseResponse } from '../../models/baseresponse.model';
 import { SessionCountdownModule } from '../session-countdown/session-countdown.component';
+import { WorkspaceChangerModule } from '../workspace-selector/workspace-selector.component';
+import { ToolbarSearchModule } from '../toolbar-search/toolbar.search.component';
 
 @Component({
   selector: 'app-admin-layout',
@@ -20,16 +22,21 @@ import { SessionCountdownModule } from '../session-countdown/session-countdown.c
     MaterialModule,
     RouterModule,
     CommonModule,
-    SessionCountdownModule
+    SessionCountdownModule,
+    ToolbarSearchModule,
+    WorkspaceChangerModule
   ]
 })
 export class AdminLayoutComponent {
 
   @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
-  isMobile= true;
+  protected sidenav!: MatSidenav;
+  protected isMobile= true;
+  protected menuOpened = false;
 
-  currentUser: User | null = null;
+  protected currentUser: User | null = null;
+  protected currentSiteId: number | null = null;
+  protected currentCompanyId: number | null = null;
 
   constructor(private authService: AuthService, private userService: UserService, private router: Router, private observer: BreakpointObserver) { }
 
@@ -53,6 +60,9 @@ export class AdminLayoutComponent {
       console.log('Current user', response.data);
       this.currentUser = response.data;
     });
+
+    this.currentCompanyId = this.authService.getCurrentCompanyId();
+    this.currentSiteId = this.authService.getCurrentSiteId();
   }
 
   profile(): void {
@@ -60,7 +70,11 @@ export class AdminLayoutComponent {
   }
 
   dashboard(): void {
-    this.router.navigate(['admin', 'dashboard']);
+    this.router.navigate(['company', this.currentCompanyId, 'site', this.currentSiteId, 'dashboard']);
+  }
+
+  car(): void {
+    this.router.navigate(['company', this.currentCompanyId, 'site', this.currentSiteId, 'car']);
   }
 
   logout(): void {

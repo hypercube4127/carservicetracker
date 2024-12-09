@@ -17,8 +17,8 @@
                 "ms-python.python",
                 "ms-python.debugpy",
                 "tamasfe.even-better-toml",
-                "SonarSource.sonarlint-vscode",
-                "samuelcolvin.jinjahtml"
+                "samuelcolvin.jinjahtml",
+                
             ]
         }
     },

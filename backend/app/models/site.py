@@ -17,7 +17,8 @@ class Site(db.Model):
     data = {
       'id': self.id,
       'name': self.name,
-      'url': self.url
+      'url': self.url,
+      'company_id': self.company_id
     }
     return data
 

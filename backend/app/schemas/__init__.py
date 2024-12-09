@@ -7,6 +7,8 @@ from app.schemas.login import LoginSchema
 from app.schemas.user import UserSchema
 from app.schemas.company import CompanySchema
 from app.schemas.site import SiteSchema
+from app.schemas.car import CarSchema
+from app.schemas.service import ServiceSchema
 
 class Level(Enum):
   ERROR = "ERROR"

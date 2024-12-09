@@ -4,6 +4,7 @@ h1 {
 
 h2 {padding: 1rem;}
 
+
 mat-toolbar {
   position:fixed;
   top:0;
@@ -13,14 +14,6 @@ mat-toolbar {
   ::ng-deep.mat-mdc-text-field-wrapper {
     background-color: #ffffff50;
     color: #fff;
-    border-color: #fff;
-    border-radius: 24px;
-  }
-
-  ::ng-deep.mat-mdc-text-field-wrapper:hover {
-    background-color: #ffffff50;
-    color: #fff;
-    border-color: #fff;
     border-radius: 24px;
   }
 
@@ -38,6 +31,9 @@ mat-toolbar {
     }
   }
   
+  ::ng-deep.no-subscript .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
 }
 
 mat-sidenav-container {
@@ -52,10 +48,10 @@ mat-sidenav {
   }
 
   .entry{
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding:0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding:0.75rem;
   }
 
 }
@@ -65,12 +61,27 @@ mat-sidenav-content{
   padding-top: 5rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  z-index: auto;
   @media screen and (min-width: 600px) {
     padding-top: 5rem;
   }
 }
 
-.collapsed {
-  width: 88px;   
+
+.sidenav-toggle {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1200;
+  background: white;
+  border-radius: 0 50% 50% 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  mat-icon {
+    transition: transform 0.3s ease;
+  }
 }
 
+.sidenav-toggle.opened > mat-icon {
+  transform: rotate(180deg);
+}

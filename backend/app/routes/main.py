@@ -2,11 +2,12 @@
 import logging
 import os
 
-from flask import jsonify, g
+from flask import jsonify, g, request
 from werkzeug.exceptions import InternalServerError
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request, get_jwt
 from marshmallow import ValidationError
 
+from app.exceptions import AppError
 from app.models import InvalidatedToken, User
 from app.models.user import UserStatus
 from app.schemas import BaseResponseSchema, Level
@@ -17,7 +18,12 @@ from .. import app, jwt, project_config
 logger = logging.getLogger(__name__)
 
 @app.before_request
-def load_user():
+def before_request_processor():
+  if request.method == 'OPTIONS':
+      response = jsonify()
+      response.status_code = 200
+      return response
+
   try:
     verify_jwt_in_request()
     invalid_token = InvalidatedToken.query.get(get_jwt()['jti'])
@@ -55,9 +61,12 @@ def expired_token_callback(jwt_header, jwt_data):
 def handle_exception(e):
   if isinstance(e, ValidationError):
     return BaseResponseSchema(e).jsonify(), 400
-  
-  if isinstance(e, InternalServerError):
-    return BaseResponseSchema(e.description, Level.ERROR).jsonify(), 500
+
+  if isinstance(e, AppError):
+    return BaseResponseSchema(e.message, Level.ERROR).jsonify(), 400
   
   logger.error(f"Error: {e}")
+  if isinstance(e, InternalServerError):
+    return BaseResponseSchema(e.description, Level.ERROR).jsonify(), 
+  
   return BaseResponseSchema(str(e), Level.ERROR).jsonify(), 500

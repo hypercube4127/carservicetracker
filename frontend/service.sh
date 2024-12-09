@@ -10,7 +10,7 @@ start() {
     echo "Program already running (PID: $(cat $PIDFILE))"
     exit 1
   fi
-  
+
   echo "Starting program..."
   nohup $PROGRAM $ARGS > $OUTPUT 2>&1 &
   echo $! > "$PIDFILE"
