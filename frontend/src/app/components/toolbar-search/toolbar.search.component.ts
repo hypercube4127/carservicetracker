@@ -3,6 +3,7 @@ import { MaterialModule } from '../../material.module';
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { CarService } from '../../services/car.service';
 import { Car } from '../../models/car.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'toolbar-search',
@@ -10,6 +11,7 @@ import { Car } from '../../models/car.model';
   templateUrl: './toolbar.search.component.html',
   styleUrls: ['./toolbar.search.component.scss'],
   imports: [
+    CommonModule,
     MaterialModule
   ]
 })
