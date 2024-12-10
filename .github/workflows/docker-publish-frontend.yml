@@ -1,0 +1,19 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - frontend/**
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Docker Build Frontend
+        uses: ./.github/workflows/build.yml
+        with:
+          image_name: frontend
+          tag: latest-develop
