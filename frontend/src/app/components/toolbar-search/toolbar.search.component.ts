@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { CarService } from '../../services/car.service';
+import { Car } from '../../models/car.model';
 
 @Component({
   selector: 'toolbar-search',
@@ -15,6 +16,8 @@ import { CarService } from '../../services/car.service';
 export class ToolbarSearchModule implements OnInit {
 
   private searchSubject = new Subject<string>();
+
+  protected carHits: Car[] = [];
 
   constructor(
     private carService: CarService
@@ -41,5 +44,9 @@ export class ToolbarSearchModule implements OnInit {
       console.log('Search results:', results);
     });
     console.log('Search for:', query);
+  }
+
+  openCarDetails(car: Car): void {
+    console.log('Open car details:', car);
   }
 }

@@ -2,5 +2,8 @@
     <input matInput [placeholder]="'Search'" (input)="onSearch($event)">
 </mat-form-field>
 <mat-menu #hitsMenu="matMenu" xPosition="after">
-    
+    <button mat-menu-item *ngFor="let hit of carHits" (click)="openCarDetails(hit)">
+        <mat-icon>{{hit.icon}}</mat-icon>
+        <span>{{hit.name}}</span>
+    </button>
 </mat-menu>
