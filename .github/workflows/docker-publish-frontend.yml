@@ -11,5 +11,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      image_name: frontend
-      tag: latest-develop
+      IMAGE_NAME: frontend
+      TAG: latest-develop
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
