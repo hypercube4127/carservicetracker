@@ -3,6 +3,9 @@ name: Docker Build
 on:
   workflow_call:
     inputs:
+      BUILD_DIR:
+        required: true
+        type: string
       IMAGE_NAME:
         required: true
         type: string
@@ -27,8 +30,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker Image
-        run: cd ./${{inputs.IMAGE_NAME}} && docker build --target prod -t ${{ vars.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.TAG }} .
-
-      - name: Push Docker Image
         run: |
-          docker push ${{ vars.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.TAG }}
+          cd ./${{ inputs.BUILD_DIR }} && \
+          docker buildx build \
+            --target prod \
+            --push \
+            --cache-from=type=gha \
+            --cache-to=type=gha,mode=max \
+            -t ${{ vars.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.TAG }} .

@@ -11,7 +11,8 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      IMAGE_NAME: frontend
-      TAG: latest-develop
+      BUILD_DIR: frontend
+      IMAGE_NAME: carservicetracker
+      TAG: fe-latest-develop
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
