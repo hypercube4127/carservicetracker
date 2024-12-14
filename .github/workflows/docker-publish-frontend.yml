@@ -21,10 +21,11 @@ jobs:
 
   deploy:
     runs-on: [self-hosted]
+    needs: build
     environment: staging
     steps:
       - name: Deploy Docker Compose
         run: |
-          cd ${{ env.INSTALL_PATH }}
+          cd ${{ vars.DEPLOY_DIR }}
           docker-compose pull
           docker-compose up -d
