@@ -1,6 +1,6 @@
-# build-and-deploy-all.yml
+# build-and-deploy.yml
 
-name: Build and Push Docker Image
+name: Build and Push Frontend
 
 on:
   push:
@@ -8,6 +8,15 @@ on:
       - develop
 
 jobs:
+  build-frontend:
+    uses: ./.github/workflows/build-frontend.yml
+    with:
+      BUILD_DIR: frontend
+      IMAGE_NAME: carservicetracker
+      TAG: fe-latest-develop
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  
   build-backend:
     uses: ./.github/workflows/build-backend.yml
     with:
@@ -16,19 +25,10 @@ jobs:
       TAG: be-latest-develop
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-
-  build-frontend:
-    uses: ./.github/workflows/build-fontend.yml
-    with:
-      BUILD_DIR: frontend
-      IMAGE_NAME: carservicetracker
-      TAG: fe-latest-develop
-    secrets:
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-
+  
   deploy:
     runs-on: [self-hosted]
-    needs: [build-backend, build-frontend]
+    needs: [build-frontend, build-backend]
     environment: staging
     steps:
       - name: Deploy Docker Compose
