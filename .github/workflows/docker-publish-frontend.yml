@@ -1,0 +1,31 @@
+# docker-publish-frontend.yml
+
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - develop
+#    paths:
+#      - frontend/**
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-fontend.yml
+    with:
+      BUILD_DIR: frontend
+      IMAGE_NAME: carservicetracker
+      TAG: fe-latest-develop
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  deploy:
+    runs-on: [self-hosted]
+    needs: build
+    environment: staging
+    steps:
+      - name: Deploy Docker Compose
+        run: |
+          cd ${{ vars.DEPLOY_DIR }}
+          docker-compose pull
+          docker-compose up -d
