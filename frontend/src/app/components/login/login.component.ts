@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MaterialModule } from '../../material.module';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LocalStorageService } from '../../services/localstorage.service';
 import { RouterService } from '../../services/router.service';
-import { UrlPlaceholders } from '../../constants/url.placeholders';
+import { PackageInfoService  } from '../../services/package.info.service';
 
 interface LoginForm {
   email: FormControl,
@@ -23,10 +22,12 @@ interface LoginForm {
 })
 export class LoginComponent {
   loginForm!: FormGroup<LoginForm>;
-
+  packageInfo = this.packageInfoService.packageInfo;
+  
   constructor(
     private authService: AuthService, 
     private router: RouterService,
+    private packageInfoService: PackageInfoService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),

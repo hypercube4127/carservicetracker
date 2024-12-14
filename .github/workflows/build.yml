@@ -25,6 +25,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Inject Build Number and Commit ID into package.json
+        run: |
+          BUILD_NUMBER=${{ github.run_number }}
+          COMMIT_ID=$(echo "${{ github.sha }}" | cut -c1-8)
+          jq ".build = \"$BUILD_NUMBER\" | .commit = \"$COMMIT_ID\"" ./frontend/package.json > ./frontend/package.tmp.json
+          mv ./frontend/package.tmp.json ./frontend/package.json
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:

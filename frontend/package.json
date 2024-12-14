@@ -1,6 +1,8 @@
 {
   "name": "cst-app",
   "version": "0.1.0",
+  "build": "0",
+  "commit": "HEAD",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --watch --poll=1000",

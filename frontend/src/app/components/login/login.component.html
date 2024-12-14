@@ -15,6 +15,7 @@
         <button mat-raised-button color="primary" type="submit">Login</button>
       </form>
       <button mat-raised-button color="primary" (click)="registercompany()" class="register">Register your own company</button>
+      <div class="version" matTooltip="{{ packageInfo.version }} #{{ packageInfo.build }} ({{packageInfo.commit}})">Version: {{ packageInfo.version }}</div>
     </mat-card-content>
   </mat-card>
 </div>
