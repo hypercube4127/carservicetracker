@@ -18,7 +18,7 @@ on:
       DOCKERHUB_TOKEN:
         required: true
 jobs:
-  build-frontend:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:

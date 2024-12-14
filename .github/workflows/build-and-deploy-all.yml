@@ -1,4 +1,4 @@
-# docker-publish-frontend.yml
+# build-and-deploy-all.yml
 
 name: Build and Push Docker Image
 
@@ -6,11 +6,11 @@ on:
   push:
     branches:
       - develop
-#    paths:
-#      - frontend/**
 
 jobs:
-  build:
+
+
+  build-frontend:
     uses: ./.github/workflows/build-fontend.yml
     with:
       BUILD_DIR: frontend
