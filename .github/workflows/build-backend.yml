@@ -49,6 +49,6 @@ jobs:
           push: true
           tags: ${{ vars.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.TAG }}
           target: prod
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ vars.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.TAG }}
+          cache-to: type=inline
 
