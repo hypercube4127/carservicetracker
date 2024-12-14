@@ -50,7 +50,9 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=int(os.getenv('JWT_EX
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
-CORS(app)
+
+allowed_origins = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS(app, origins=allowed_origins)
 
 # Importing models and routes (to avoid cross-referencing at the end)
 
