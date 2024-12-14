@@ -17,9 +17,18 @@ jobs:
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  build-frontend:
+    uses: ./.github/workflows/build-fontend.yml
+    with:
+      BUILD_DIR: frontend
+      IMAGE_NAME: carservicetracker
+      TAG: fe-latest-develop
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
   deploy:
     runs-on: [self-hosted]
-    needs: build
+    needs: [build-backend, build-frontend]
     environment: staging
     steps:
       - name: Deploy Docker Compose
