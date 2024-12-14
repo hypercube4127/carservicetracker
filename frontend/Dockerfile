@@ -20,7 +20,7 @@ ENV TZ=Europe/Budapest
 WORKDIR $INSTALL_PATH
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
 RUN echo "$TZ" > /etc/timezone
-RUN apk --update add bash curl
+RUN apk --update add bash curl jq
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY mime.types /etc/nginx/mime.types
 COPY --from=build /opt/project/dist/cst-app/browser/ $INSTALL_PATH/

@@ -46,8 +46,8 @@ def before_request_processor():
 def echo():
   data = { 
       "version" : project_config['tool']['poetry']['version'],
-      "build_number" : project_config['custom']['build-number'],
-      "commitid": project_config['custom']['commit-hash']
+      "build_number" : project_config['custom']['build'],
+      "commitid": project_config['custom']['commit']
   } 
   return jsonify(data) 
 

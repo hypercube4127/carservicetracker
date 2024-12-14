@@ -32,5 +32,5 @@ start = "app.app:main"
 
 [custom]
 app-title = "Flask App"
-build-number = "0"
-commit-hash = "HEAD"
+build = "0"
+commit = "HEAD"
