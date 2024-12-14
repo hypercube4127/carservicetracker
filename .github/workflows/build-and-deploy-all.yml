@@ -8,14 +8,12 @@ on:
       - develop
 
 jobs:
-
-
-  build-frontend:
-    uses: ./.github/workflows/build-fontend.yml
+  build-backend:
+    uses: ./.github/workflows/build-backend.yml
     with:
-      BUILD_DIR: frontend
+      BUILD_DIR: backend
       IMAGE_NAME: carservicetracker
-      TAG: fe-latest-develop
+      TAG: be-latest-develop
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
