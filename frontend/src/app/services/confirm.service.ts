@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Company } from '../models/company.model';
-import { environment } from '../../environments/environment';
 import { BaseResponse } from '../models/baseresponse.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfirmService {
-  private apiUrl = environment.backendUrl + '/confirm';
+  private apiUrl = 'confirm';
 
   constructor(private http: HttpClient) { }
 

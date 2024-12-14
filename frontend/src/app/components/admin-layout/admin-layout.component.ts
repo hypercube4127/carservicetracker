@@ -3,7 +3,6 @@ import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MaterialModule } from '../../material.module';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { UserService } from '../../services/user.service';
@@ -12,6 +11,8 @@ import { BaseResponse } from '../../models/baseresponse.model';
 import { SessionCountdownModule } from '../session-countdown/session-countdown.component';
 import { WorkspaceChangerModule } from '../workspace-selector/workspace-selector.component';
 import { ToolbarSearchModule } from '../toolbar-search/toolbar.search.component';
+import { RouterService } from '../../services/router.service';
+import { UrlPlaceholders } from '../../constants/url.placeholders';
 
 @Component({
   selector: 'app-admin-layout',
@@ -38,7 +39,7 @@ export class AdminLayoutComponent {
   protected currentSiteId: number | null = null;
   protected currentCompanyId: number | null = null;
 
-  constructor(private authService: AuthService, private userService: UserService, private router: Router, private observer: BreakpointObserver) { }
+  constructor(private authService: AuthService, private userService: UserService, private router: RouterService, private observer: BreakpointObserver) { }
 
   ngOnInit() {
 
@@ -70,11 +71,11 @@ export class AdminLayoutComponent {
   }
 
   dashboard(): void {
-    this.router.navigate(['company', this.currentCompanyId, 'site', this.currentSiteId, 'dashboard']);
+    this.router.navigateToDashboard();
   }
 
   car(): void {
-    this.router.navigate(['company', this.currentCompanyId, 'site', this.currentSiteId, 'car']);
+    this.router.navigate([...UrlPlaceholders.COMPANY_SITE_PATH, 'car']);
   }
 
   logout(): void {

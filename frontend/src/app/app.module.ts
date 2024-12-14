@@ -10,6 +10,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 // Angular Material Modules
 import { MaterialModule } from './material.module';
+import { RouterService } from './services/router.service';
 
 export function initializeApp(authGuard: AuthGuard): () => boolean {
   return () => authGuard.canActivate();
@@ -30,6 +31,7 @@ export function initializeApp(authGuard: AuthGuard): () => boolean {
   ],
   providers: [
     AuthService,
+    RouterService,
     AuthGuard, 
     provideHttpClient(withFetch()),
     {

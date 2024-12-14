@@ -12,9 +12,13 @@ from app.services.company import get_company_by_id_check_permission
 from app.services.car import normalize_plate, vin_decode
 from app.exceptions import ObjectNotFoundError
 
-@app.route('/vindecode/<string:vin>', methods=['GET'])
+@app.route('/vindecode', methods=['GET'])
 @jwt_required()
-def vin(vin):
+def vin():
+  vin = str(request.args.get('vin', ''))
+  if len(vin) < 2:
+    return BaseResponseSchema([], "Must be more than two characters", level=Level.WARNING).jsonify(), 400
+
   manu_model_year = vin_decode(vin)
   if manu_model_year:
     return BaseResponseSchema(manu_model_year).jsonify()

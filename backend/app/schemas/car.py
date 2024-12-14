@@ -13,3 +13,20 @@ class CarSchema(Schema):
   power = fields.Int(required=False, allow_none=True)
 
   company_id = fields.Int(required=True)
+
+class VmiDecodeResult():
+  manufacturer: str
+  model: str
+  year: int
+
+  def __init__(self, manufacturer: str, model: str, year: int):
+    self.manufacturer = manufacturer
+    self.model = model
+    self.year = year
+  
+  def to_dict(self):
+    return {
+      'manufacturer': self.manufacturer,
+      'model': self.model,
+      'year': self.year
+    }

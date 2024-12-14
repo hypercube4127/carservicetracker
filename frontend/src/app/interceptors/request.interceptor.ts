@@ -1,49 +1,50 @@
-import { HttpEvent, HttpRequest, HttpResponse, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { HttpResponse, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { BaseResponse, Level, Message } from '../models/baseresponse.model';
 import { ToastrService } from 'ngx-toastr';
 import { UrlPlaceholder } from '../models/shared.model';
-import { LocalStorageService } from '../services/localstorage.service';
+import { ConfigService } from '../services/config.service';
 
-export function requestInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> {
+export const requestInterceptor: HttpInterceptorFn = (req, next) => {
+  if (req.url.startsWith('./')) {
+    return next(req);
+  }
+
+  const configService = inject(ConfigService);
+  const authService = inject(AuthService);
+  const toastr = inject(ToastrService);
+  const token = authService.getToken();
+
+  var url = `${configService.config.backendUrl}${req.url}`;
+  var headers = req.headers;
+
+  if (token) {
+    // Add token to headers
+    headers = headers.set('Authorization', `Bearer ${token}`);
+
+    // Replace placeholders in URL
+    const companyId = authService.getCurrentCompanyId();
+    if (url.includes(UrlPlaceholder.COMPANY) && companyId) {
+      url = url.replace(UrlPlaceholder.COMPANY, companyId.toString());
+    }
+
+    const siteId = authService.getCurrentSiteId();
+    if (req.url.includes(UrlPlaceholder.SITE) && siteId) {
+      url = url.replace(UrlPlaceholder.SITE, siteId.toString());
+    }    
+  }
+
+  req = req.clone({
+    url: url,
+    headers: headers
+  });
+
   if (req.method === 'OPTIONS') {
     return next(req);
   }
 
-  const authService = inject(AuthService);
-  const localStorageService = inject(LocalStorageService);
-  const toastr = inject(ToastrService);
-  const token = authService.getToken();
-  const companyId = localStorageService.get<number>('company_id');
-  const siteId = localStorageService.get<number>('site_id');
-
-  console.debug('Token:', token);
-  if (token) {
-
-    //console.debug('AppContext Site:', contextHolder.getSiteId());
-  
-    var newUrl = req.url;
-
-    if (req.url.includes(UrlPlaceholder.COMPANY) && companyId) {
-      newUrl = req.url.replace(UrlPlaceholder.COMPANY, companyId.toString());
-    }
-
-    if (req.url.includes(UrlPlaceholder.SITE) && siteId) {
-      newUrl = req.url.replace(UrlPlaceholder.SITE, siteId.toString());
-    }
-    
-    req = req.clone({
-      url: newUrl,
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  }
   return next(req).pipe(
     tap(event => {
       if (event instanceof HttpResponse) {
@@ -73,8 +74,6 @@ export function requestInterceptor(
           });
         }
       }
-      // Handle successful responses here if needed
-      console.log('Response event:', event);
     }),
     tap({
       error: (error: HttpErrorResponse) => {

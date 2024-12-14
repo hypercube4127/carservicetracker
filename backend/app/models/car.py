@@ -46,6 +46,10 @@ class Wmi(db.Model):
   code = db.Column(db.String(3), nullable=False, unique=True)
   manufacturer = db.Column(db.String(100), nullable=False)
 
+  def __init__(self, code, manufacturer):
+    self.code = code
+    self.manufacturer = manufacturer
+
   def __repr__(self):
     return f'<Wmi {self.code} {self.manufacturer}>'
   
@@ -64,6 +68,10 @@ class Vds(db.Model):
   code = db.Column(db.String(6), nullable=False, unique=True)
   model = db.Column(db.String(100), nullable=False)
 
+  def __init__(self, code, model):
+    self.code = code
+    self.model = model
+
   def __repr__(self):
     return f'<Vds {self.code} {self.model}>'
   
@@ -81,6 +89,10 @@ class Year(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   code = db.Column(db.String(1), nullable=False, unique=True)
   year = db.Column(db.Integer, nullable=False)
+
+  def __init__(self, code, year):
+    self.code = code
+    self.year = year
 
   def __repr__(self):
     return f'<Year {self.code} {self.year}>'

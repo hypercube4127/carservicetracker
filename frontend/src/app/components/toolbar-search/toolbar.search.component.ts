@@ -43,7 +43,7 @@ export class ToolbarSearchModule implements OnInit {
 
   performSearch(query: string): void {
     this.carService.search(query).subscribe((results) => {
-      console.log('Search results:', results);
+      this.carHits = results.data;
     });
     console.log('Search for:', query);
   }

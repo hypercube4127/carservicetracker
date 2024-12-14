@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, firstValueFrom, map, of } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { Login, Token } from '../models/auth.model';
 import { LocalStorageService } from './localstorage.service';
 import { Site } from '../models/site.model';
@@ -9,7 +8,6 @@ import { Company } from '../models/company.model';
 import { CompanySites } from '../models/companysites.model';
 import { BaseResponse } from '../models/baseresponse.model';
 import { CompanyService } from './company.service';
-import { resolve } from 'path';
 import { SiteService } from './site.service';
 
 @Injectable({
@@ -17,7 +15,7 @@ import { SiteService } from './site.service';
 })
 export class AuthService {
 
-  private apiUrl = environment.backendUrl + '/auth';
+  private apiUrl = 'auth';
 
   private currentSite: Site | null = null;
   private currentCompany: Company | null = null;

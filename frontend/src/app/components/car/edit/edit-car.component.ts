@@ -5,6 +5,7 @@ import { CarService } from '../../../services/car.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../material.module';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-car-edit',
@@ -18,7 +19,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class EditCarComponent {
 
-  carForm!: FormGroup;
+  private vinDecodeSubject = new Subject<string>();
+
+  protected carForm!: FormGroup;
 
   constructor(private router: Router, private route: ActivatedRoute, private carService: CarService) {
     this.carForm = new FormGroup({
@@ -36,12 +39,36 @@ export class EditCarComponent {
   }
 
   ngOnInit(): void {
+    this.carForm.reset();
+
     this.route.params.subscribe(params => {
-      const id = params['id'];
+      const id = Number(params['car_id']);
+      if (isNaN(id)) {
+        return;
+      }
       console.log('Car ID: ', id);
       this.carService.get(id).subscribe(response => {
 
       });
+    });
+
+    this.vinDecodeSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      filter(text => text.length >= 3)
+    ).subscribe(searchText => {
+      this.performVinDecode(searchText);
+    });
+  }
+
+  onModifyVin(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.vinDecodeSubject.next(input.value);
+  }
+
+  performVinDecode(vin: string): void {
+    this.carService.vinDecode(vin).subscribe((results) => {
+      console.log('Decoded VIN:', results);
     });
   }
 

@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { Car } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { RouterService } from '../../services/router.service';
+import { UrlPlaceholders } from '../../constants/url.placeholders';
 
 @Component({
   selector: 'app-car',
@@ -15,12 +17,17 @@ import { Router } from '@angular/router';
 })
 export class CarComponent {
 
+  protected currentSiteId: number | null = null;
+  protected currentCompanyId: number | null = null;
+
   displayedColumns: string[] = ['make', 'model', 'year', 'plate', 'vin', 'actions'];
   carList: Car[] = [];
 
-  constructor(private carService: CarService, private router: Router) { }
+  constructor(private authService: AuthService, private carService: CarService, private router: RouterService) { }
 
   ngOnInit(): void {
+    this.currentCompanyId = this.authService.getCurrentCompanyId();
+    this.currentSiteId = this.authService.getCurrentSiteId();
     this.carService.all().subscribe({
       next: (cars) => {
         this.carList = cars.data;
@@ -37,11 +44,12 @@ export class CarComponent {
   }
 
   deleteCar(car: Car): void {
+    
     console.log('Deleting car:', car);
   }
 
   addCar(): void {
-    console.log('Adding new car');
+    this.router.navigate([...UrlPlaceholders.COMPANY_SITE_PATH, 'car', 'new']);
   }
 
   viewWorksheets(car: Car): void {

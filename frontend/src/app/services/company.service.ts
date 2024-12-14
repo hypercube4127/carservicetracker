@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Company } from '../models/company.model';
-import { environment } from '../../environments/environment';
 import { BaseResponse } from '../models/baseresponse.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
-  private apiUrl = environment.backendUrl + '/company';
+  private apiUrl = 'company';
 
   constructor(private http: HttpClient) { }
 

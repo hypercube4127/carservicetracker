@@ -53,7 +53,7 @@ services:
       - ''
 
   frontend:
-    image: synappsacr.azurecr.io/flask/frontend:latest
+    image: hypercube4127/carservicetracker:fe-latest-develop
     restart: unless-stopped
     environment:
       - BACKEND_URL=https://example/api

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Car } from '../models/car.model';
-import { environment } from '../../environments/environment';
 import { BaseResponse } from '../models/baseresponse.model';
 import { UrlPlaceholder } from '../models/shared.model';
 import { HttpParams } from '@angular/common/http';
@@ -10,7 +9,7 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CarService {
-  private apiUrl = environment.backendUrl + '/company/' + UrlPlaceholder.COMPANY + '/car';
+  private apiUrl = 'company/' + UrlPlaceholder.COMPANY + '/car';
 
   constructor(private http: HttpClient) {
   }
@@ -38,5 +37,10 @@ export class CarService {
   search(search: string) {
     const params = new HttpParams().set('query', search);
     return this.http.get<BaseResponse<Car[]>>(`${this.apiUrl}/search`, {params});
+  }
+
+  vinDecode(vin: string) {
+    const params = new HttpParams().set('vin', vin);
+    return this.http.get<BaseResponse<Car>>(`vindecode`, {params});
   }
 }

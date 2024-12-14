@@ -18,6 +18,10 @@ form {
   margin: 20px auto;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .col:last-child {
   margin-right: 0;
 }
@@ -88,3 +92,4 @@ $breakpoints: (
     @include flex-col($i);
   }
 }
+

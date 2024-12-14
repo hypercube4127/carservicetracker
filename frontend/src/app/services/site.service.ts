@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { BaseResponse } from '../models/baseresponse.model';
 import { Site } from '../models/site.model';
 import { UrlPlaceholder } from '../models/shared.model';
@@ -9,7 +8,7 @@ import { UrlPlaceholder } from '../models/shared.model';
   providedIn: 'root'
 })
 export class SiteService {
-  private apiUrl = environment.backendUrl + '/company/' + UrlPlaceholder.COMPANY + '/site';
+  private apiUrl = 'company/' + UrlPlaceholder.COMPANY + '/site';
 
   constructor(private http: HttpClient) { }
 

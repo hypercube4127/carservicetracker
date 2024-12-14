@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { environment } from '../../environments/environment';
 import { BaseResponse } from '../models/baseresponse.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = environment.backendUrl + '/user';
+  private apiUrl = 'user';
 
   constructor(private http: HttpClient) { }
 

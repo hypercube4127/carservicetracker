@@ -49,7 +49,6 @@ export class ConfirmComponent {
   sendCode(): void {
     this.confirmService.send({ code: this.confirmForm.value.code }).subscribe({
       next: () => {
-        console.log('Login success');
         if (this.authService.isLoggedIn()) {
           this.router.navigate(['admin', 'dashboard']);
         }

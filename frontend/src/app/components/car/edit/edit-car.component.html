@@ -1,10 +1,14 @@
-<h2 *ngIf="carForm.get('id')">{{carForm.get('plate')}} {{carForm.get('model')}} {{carForm.get('make')}} {{carForm.get('year')}} ({{carForm.get('vin')}})</h2>
-<h2 *ngIf="!carForm.get('id')">New Car</h2>
+<h2 *ngIf="carForm.get('id')?.value">{{carForm.get('plate')?.value}} {{carForm.get('model')?.value}} {{carForm.get('make')?.value}} {{carForm.get('year')?.value}} ({{carForm.get('vin')?.value}})</h2>
+<h2 *ngIf="!carForm.get('id')?.value">New Car</h2>
 
 <form (ngSubmit)="saveCar()">
   <mat-form-field appearance="fill">
+    <mat-label>VIN</mat-label>
+    <input matInput formControlName="vin" name="vin" class="uppercase" required  (input)="onModifyVin($event)">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>Plate</mat-label>
-    <input matInput formControlName="plate" name="plate" required>
+    <input matInput formControlName="plate" name="plate" class="uppercase" required>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Model</mat-label>
@@ -19,8 +23,22 @@
     <input matInput formControlName="year" name="year" required>
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>VIN</mat-label>
-    <input matInput formControlName="vin" name="vin" required>
+    <mat-label>Engine Number</mat-label>
+    <input matInput formControlName="engineNumber" name="engineNumber" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Engine Code</mat-label>
+    <input matInput formControlName="engineCode" name="engineCode" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Power</mat-label>
+    <input matInput formControlName="power" name="power" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Technical Exam Expiration Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="technicalExamExpirationDate" name="technicalExamExpirationDate" required>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <button mat-raised-button color="primary" type="submit">Save</button>
 </form>

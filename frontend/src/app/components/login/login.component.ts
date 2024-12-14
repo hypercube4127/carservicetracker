@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MaterialModule } from '../../material.module';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LocalStorageService } from '../../services/localstorage.service';
+import { RouterService } from '../../services/router.service';
+import { UrlPlaceholders } from '../../constants/url.placeholders';
 
 interface LoginForm {
   email: FormControl,
@@ -25,8 +26,7 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService, 
-    private router: Router,
-    private localStorageService: LocalStorageService
+    private router: RouterService,
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -48,41 +48,11 @@ export class LoginComponent {
   login(): void {
     this.authService.login({ email: this.loginForm.value.email, password: this.loginForm.value.password }).subscribe({
       next: (response) => {
-        console.log('Login success', response);
-        this.autoSelectCompanyAndSite();
+        console.log('Login success');
+        this.router.navigateToDashboard();
       },
       error: (err) => {
         console.error('Login failed', err);
-      }
-    });
-  }
-
-  private autoSelectCompanyAndSite(): void {
-    const companyId = this.localStorageService.get<number>('company_id')
-    const siteId = this.localStorageService.get<number>('site_id');
-
-    this.authService.availableCompanyAndSiteMap().subscribe({
-      next: (response) => {
-        console.log('Available companies and sites', response);
-        if (companyId && siteId) {
-          const company = response.data.find((company) => company.id === companyId);
-          if (company && siteId !== 0) {
-            const site = company.sites.find((site) => site.id === siteId);
-            if (site) {
-              this.router.navigate(['company', company.id, 'site', site.id, 'dashboard']);
-            }
-            this.router.navigate(['company', company.id, 'site', 0, 'dashboard']);
-            return;
-          }
-        }
-
-        if (response.data.length === 1) {
-          this.router.navigate(['company', response.data[0].id, 'site', 0, 'dashboard']);
-          return;
-        }
-      },
-      error: (err) => {
-        console.error('Failed to get available companies and sites', err);
       }
     });
   }

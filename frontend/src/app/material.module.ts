@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   exports: [
@@ -33,7 +35,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 		MatSelectModule,
 		MatTableModule,
 		MatPaginatorModule,
-		MatTooltipModule
+		MatTooltipModule,
+		MatAutocompleteModule,
+		MatDatepickerModule
 	// Export other Angular Material modules as needed
   ]
 })

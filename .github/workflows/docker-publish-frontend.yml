@@ -1,3 +1,5 @@
+# docker-publish-frontend.yml
+
 name: Build and Push Docker Image
 
 on:
@@ -16,3 +18,13 @@ jobs:
       TAG: fe-latest-develop
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  deploy:
+    runs-on: [self-hosted]
+    environment: staging
+    steps:
+      - name: Deploy Docker Compose
+        run: |
+          cd ${{ env.INSTALL_PATH }}
+          docker-compose pull
+          docker-compose up -d
