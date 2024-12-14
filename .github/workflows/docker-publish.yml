@@ -10,7 +10,7 @@ on:
 #      - backend/**
 
 jobs:
-  build:
+  build-backend:
     uses: ./.github/workflows/build-backend.yml
     with:
       BUILD_DIR: backend
@@ -19,7 +19,27 @@ jobs:
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  deploy:
+  deploy-backend:
+    runs-on: [self-hosted]
+    needs: build
+    environment: staging
+    steps:
+      - name: Deploy Docker Compose
+        run: |
+          cd ${{ vars.DEPLOY_DIR }}
+          docker-compose pull
+          docker-compose up -d
+
+  build-frontend:
+    uses: ./.github/workflows/build-fontend.yml
+    with:
+      BUILD_DIR: frontend
+      IMAGE_NAME: carservicetracker
+      TAG: fe-latest-develop
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  deploy-frontend:
     runs-on: [self-hosted]
     needs: build
     environment: staging
