@@ -1,5 +1,5 @@
 #!/bin/bash
-CONFIG_FILE="/opt/project/assets/config.json"
+CONFIG_FILE="$INSTALL_PATH/assets/config.json"
 RUN_AS_DAEMON="false"
 SLEEP_SECONDS=1
 TEMP_FILE="/tmp/config.json.bak"

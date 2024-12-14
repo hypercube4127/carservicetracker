@@ -13,14 +13,14 @@ FROM base AS build
 COPY . $INSTALL_PATH
 RUN npm run build
 
-FROM alpine:3.19 AS prod
+FROM nginx:1.26.2-alpine3.20-slim AS prod
 EXPOSE 80
 ENV INSTALL_PATH=/usr/share/nginx/html
 ENV TZ=Europe/Budapest
 WORKDIR $INSTALL_PATH
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
 RUN echo "$TZ" > /etc/timezone
-RUN apk --update add nginx curl
+RUN apk --update add bash curl
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY mime.types /etc/nginx/mime.types
 COPY --from=build /opt/project/dist/cst-app/browser/ $INSTALL_PATH/
