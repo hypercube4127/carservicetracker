@@ -17,13 +17,13 @@ from app.exceptions import ObjectNotFoundError
 def vin():
   vin = str(request.args.get('vin', ''))
   if len(vin) < 2:
-    return BaseResponseSchema([], "Must be more than two characters", level=Level.WARNING).jsonify(), 400
+    return BaseResponseSchema([], "Must be more than two characters", Level.WARNING).jsonify(), 400
 
   manu_model_year = vin_decode(vin)
   if manu_model_year:
     return BaseResponseSchema(manu_model_year).jsonify()
   else:
-    return BaseResponseSchema(None, "Could not decode the VIN number", level=Level.WARNING).jsonify(), 400
+    return BaseResponseSchema(None, "Could not decode the VIN number", Level.WARNING).jsonify(), 400
 
 @app.route(f'{COMPANY_PATH_ID}{CAR_PATH}', methods=['POST'])
 @jwt_required()
@@ -35,7 +35,7 @@ def create_car(company_id):
 
   check_company = Car.query.filter(Car.company_id == company.id, Car.plate_normalized.ilike(plate_normalized)).first()
   if check_company and check_company.id != id:
-    return BaseResponseSchema(None, "Car already exists with same plate number", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Car already exists with same plate number", Level.ERROR).jsonify(), 400
 
   car = Car(**data)
   car.company = company
@@ -71,12 +71,12 @@ def get_car(company_id, car_id):
     
     check_car: Car = Car.query.filter(Car.company_id == company.id, Car.vin.ilike(data['vin'])).first()
     if check_car and check_car.id != id:
-      return BaseResponseSchema(None, "Car already exists with same vin", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Car already exists with same vin", Level.ERROR).jsonify(), 400
 
     plate_normalized = normalize_plate(data['plate'])
     check_car: Car = Car.query.filter(Car.company_id == company.id, Car.plate_normalized.ilike(plate_normalized)).first()
     if check_car and check_car.id != id:
-      return BaseResponseSchema(None, "Car already exists with same vin", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Car already exists with same vin", Level.ERROR).jsonify(), 400
 
     car.vin = data['vin']
     car.model = data['model']
@@ -114,7 +114,7 @@ def search(company_id):
 
   query = str(request.args.get('query', ''))
   if len(query) < 2:
-    return BaseResponseSchema([], "Must be more than two characters", level=Level.WARNING).jsonify(), 400
+    return BaseResponseSchema([], "Must be more than two characters", Level.WARNING).jsonify(), 400
 
   #search_query = text("plainto_tsquery('simple', :query)").bindparams(query=query)
 

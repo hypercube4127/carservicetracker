@@ -12,6 +12,7 @@ from app.schemas import BaseResponseSchema, Level, CompanySchema
 from app.helpers import generate_code
 from app.schemas.register import RegisterCompanySchema
 from app.services.company import get_user_companies, get_company_by_id_check_permission
+from app.services.email import EmailSenderService
 
 @app.route(f'{COMPANY_PATH}', methods=['GET'])
 @jwt_required()
@@ -32,7 +33,7 @@ def get_company(company_id):
     
     check_company = Company.query.filter(Company.name.ilike(data['name'])).first()
     if check_company and check_company.id != id:
-      return BaseResponseSchema(None, "Company already exists with same name", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Company already exists with same name", Level.ERROR).jsonify(), 400
 
     company.name = data['name']
     company.address = data['address']
@@ -50,19 +51,20 @@ def pre_register_company():
 
   check_confirm = Confirm.query.filter(Confirm.email.ilike(data['email'])).first()
   if check_confirm:
-    return BaseResponseSchema(None, "A confirmation email has already been sent", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema("A confirmation email has already been sent", Level.ERROR).jsonify(), 400
 
   check_confirm = Confirm.query.filter(Confirm.type == ConfirmType.REGISTER_COMPANY, Confirm.name.ilike(data['name'])).first()
   if check_confirm:
-    return BaseResponseSchema(None, "Company already exists with same name", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Company already exists with same name", Level.ERROR).jsonify(), 400
 
   check_company = Company.query.filter(Company.name.ilike(data['name'])).first()
   if check_company and check_company.id != id:
-    return BaseResponseSchema(None, "Company already exists with same name", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Company already exists with same name", Level.ERROR).jsonify(), 400
 
   password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
   confirm = Confirm(name=data['name'], code=generate_code(code_length=10), type=ConfirmType.REGISTER_COMPANY, email=data['email'], company_name=data['companyName'], user_password=password)
+  EmailSenderService.get_instance().send_confirm_emails()
 
   db.session.add(confirm)
   db.session.commit()
@@ -76,7 +78,7 @@ def create_company():
   data = CompanySchema().load(request.json)
   check_company = Company.query.filter(Company.name.ilike(data['name'])).first()
   if check_company and check_company.id != id:
-    return BaseResponseSchema(None, "Company already exists with same name", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Company already exists with same name", Level.ERROR).jsonify(), 400
 
   data['code'] = generate_code()
   data['owner_id'] = g.user.id

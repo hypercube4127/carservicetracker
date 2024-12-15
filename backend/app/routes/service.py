@@ -18,7 +18,7 @@ def create_service(company_id):
 
   check_service = Service.query.filter(Service.company_id == company.id, Service.name.ilike(data['name'])).first()
   if check_service and check_service.id != id:
-    return BaseResponseSchema(None, "Service already exists with same name", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Service already exists with same name", Level.ERROR).jsonify(), 400
 
   service = Service(**data)
   service.company = company
@@ -54,7 +54,7 @@ def get_service(company_id, service_id):
     
     check_car: Service = Service.query.filter(Service.company_id == company.id, Service.name.ilike(data['name'])).first()
     if check_car and check_car.id != id:
-      return BaseResponseSchema(None, "Service already exists with same vin", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Service already exists with same vin", Level.ERROR).jsonify(), 400
 
     service.name = data['name']
     service.price_netto = data['price_netto']

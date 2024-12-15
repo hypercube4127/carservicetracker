@@ -18,7 +18,7 @@ def create_customer(company_id):
 
   check_customer = Customer.query.filter(Customer.email.ilike(data['email']), Customer.company_id == company.id).first()
   if check_customer and check_customer.id != id:
-    return BaseResponseSchema(None, "Customer already exists with same email", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Customer already exists with same email", Level.ERROR).jsonify(), 400
 
   customer = Customer(**data)
   customer.company = company
@@ -54,11 +54,11 @@ def get_customer(company_id, customer_id):
     
     check_customer: Customer = Customer.query.filter(Customer.company ,Customer.email.ilike(data['email'])).first()
     if check_customer and check_customer.id != id:
-      return BaseResponseSchema(None, "Customer already exists with same email", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Customer already exists with same email", Level.ERROR).jsonify(), 400
 
     check_customer: Customer = Customer.query.filter(Customer.phone.ilike(data['phone'])).first()
     if check_customer and check_customer.id != id:
-      return BaseResponseSchema(None, "Customer already exists with same phone", level=Level.ERROR).jsonify(), 400
+      return BaseResponseSchema(None, "Customer already exists with same phone", Level.ERROR).jsonify(), 400
 
     customer.name = data['name']
     customer.email = data['email']

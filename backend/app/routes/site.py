@@ -11,14 +11,14 @@ def get_sites(company_id):
   company = Company.query.get(company_id)
 
   if company is None:
-    return BaseResponseSchema(None, "Unauthorized", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Unauthorized", Level.ERROR).jsonify(), 400
 
   if g.is_admin is False and company.owner_id != g.user.id:
     user_roles = UserSiteUserRole.query.filter_by(user_id=g.user.id).all()
     site_ids = [role.site_id for role in user_roles]
     sites = Site.query.filter(Site.company_id == company.id & Site.id.in_(site_ids)).all()
     if len(sites) == 0:
-      return BaseResponseSchema(None, "Unauthorized", level=Level.ERROR).jsonify, 400
+      return BaseResponseSchema(None, "Unauthorized", Level.ERROR).jsonify, 400
   else:
     sites = Site.query.filter_by(company=company).all()
 
@@ -29,23 +29,23 @@ def get_sites(company_id):
 def get_site(company_id, site_id):
   company = Company.query.get(company_id)
   if company is None:
-    return BaseResponseSchema("Unauthorized", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema("Unauthorized", Level.ERROR).jsonify(), 400
 
   site = Site.query.filter_by(company=company, id=site_id).first()
   if site is None:
-    return BaseResponseSchema("Unauthorized", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema("Unauthorized", Level.ERROR).jsonify(), 400
 
   if company.owner_id == g.user.id or UserSiteUserRole.query.filter_by(user=g.user, site=site).first():
     return BaseResponseSchema(site.to_dict()).jsonify()
 
-  return BaseResponseSchema("Unauthorized", level=Level.ERROR).jsonify(), 400
+  return BaseResponseSchema("Unauthorized", Level.ERROR).jsonify(), 400
 
 @app.route(f'{COMPANY_PATH_ID}{SITE_PATH}', methods=['POST'])
 def create_site(company_id):
   company = Company.query.get(company_id)
 
   if company is None:
-    return BaseResponseSchema(None, "Unauthorized", level=Level.ERROR).jsonify(), 400
+    return BaseResponseSchema(None, "Unauthorized", Level.ERROR).jsonify(), 400
 
   data = request.json
   site = Site(**data, company_id=company_id)
